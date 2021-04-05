@@ -26,8 +26,26 @@
           locale="es-MX"
           :datetime-formatter="formatearFecha"
           :timepicker="{ enableSeconds: false, hourFormat: '24' }"
-          horizontal-time-picker
+          inline
         >
+          <template #left>
+            <b-button
+              label="Ahora"
+              type="is-primary"
+              icon-left="clock"
+              @click="detalles.fecha = new Date()"
+            />
+          </template>
+
+          <template #right>
+            <b-button
+              label="Limpiar"
+              type="is-danger"
+              icon-left="close"
+              outlined
+              @click="detalles.fecha = null"
+            />
+          </template>
         </b-datetimepicker>
       </b-field>
       <b-field>
@@ -75,7 +93,7 @@ export default {
       if (this.usarFechaYHoraActual) {
         cargaUtil.fecha = Utiles.obtenerFechaYHoraActual("T");
       }
-      console.log({cargaUtil});
+      console.log({ cargaUtil });
     },
   },
 };
