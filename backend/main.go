@@ -10,6 +10,11 @@ import (
 )
 
 func main() {
+	err := crearTablas()
+	if err != nil {
+		log.Printf("Error creando tablas: %v", err)
+		return
+	}
 	enrutador := mux.NewRouter()
 	configurarRutas(enrutador)
 

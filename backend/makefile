@@ -4,6 +4,8 @@ OUTPUT_FILE=./control_estacionamiento
 .DEFAULT_GOAL=run
 
 run:
+	# Instalando dependencias
+	${GO} mod tidy
 	# Formateando
 	${GOFMT} -w .
 	# Compilando
@@ -14,6 +16,8 @@ run:
 prod:
 	# Si vas a compilar para 32 bits, probablemente quieras:
 	# SET PATH=C:\Go32\go\bin;%PATH% && SET GOROOT=C:\Go32\go\
+	# Instalando dependencias
+	${GO} mod tidy
 	# Formateando
 	${GOFMT} -w .
 	# Compilando
@@ -22,6 +26,8 @@ prod:
 prod_32:
 	# Si vas a compilar para 32 bits, probablemente quieras:
 	# SET PATH=C:\Go32\go\bin;%PATH% && SET GOROOT=C:\Go32\go\
+	# Instalando dependencias
+	${GO} mod tidy
 	# Formateando
 	${GOFMT} -w .
 	# Compilando

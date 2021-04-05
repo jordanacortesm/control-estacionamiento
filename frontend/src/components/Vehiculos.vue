@@ -19,7 +19,7 @@
 
       <b-field label="Selecciona manualmente" v-show="!usarFechaYHoraActual">
         <b-datetimepicker
-          v-model="detalles.fecha"
+          v-model="detalles.fechaEntrada"
           rounded
           placeholder="Clic aquí para seleccionar"
           icon="calendar-today"
@@ -33,7 +33,7 @@
               label="Ahora"
               type="is-primary"
               icon-left="clock"
-              @click="detalles.fecha = new Date()"
+              @click="detalles.fechaEntrada = new Date()"
             />
           </template>
 
@@ -43,7 +43,7 @@
               type="is-danger"
               icon-left="close"
               outlined
-              @click="detalles.fecha = null"
+              @click="detalles.fechaEntrada = null"
             />
           </template>
         </b-datetimepicker>
@@ -57,6 +57,7 @@
 <script>
 import Utiles from "../services/Utiles";
 import DialogosService from "../services/DialogosService";
+import VehiculosService from "../services/VehiculosService";
 export default {
   data: () => ({
     fechaYHoraActual: null,
@@ -64,11 +65,11 @@ export default {
     detalles: {
       placas: "",
       descripcion: "",
-      fecha: null,
+      fechaEntrada: null,
     },
   }),
   mounted() {
-    this.detalles.fecha = new Date();
+    this.detalles.fechaEntrada = new Date();
     this.refrescarFechaYHoraActual();
     setInterval(this.refrescarFechaYHoraActual, 500);
   },
@@ -79,8 +80,8 @@ export default {
     formatearFecha(fecha) {
       return Utiles.obtenerFechaYHora(fecha);
     },
-    guardar() {
-      if (!this.usarFechaYHoraActual && !this.detalles.fecha) {
+    async guardar() {
+      if (!this.usarFechaYHoraActual && !this.detalles.fechaEntrada) {
         return DialogosService.mostrarNotificacionError(
           "Selecciona una fecha y hora"
         );
@@ -88,12 +89,20 @@ export default {
       const cargaUtil = {
         placas: this.detalles.placas,
         descripcion: this.detalles.descripcion,
-        fecha: Utiles.obtenerFechaYHora(this.detalles.fecha, "T"),
+        fechaEntrada: Utiles.obtenerFechaYHora(this.detalles.fechaEntrada, "T"),
       };
       if (this.usarFechaYHoraActual) {
-        cargaUtil.fecha = Utiles.obtenerFechaYHoraActual("T");
+        cargaUtil.fechaEntrada = Utiles.obtenerFechaYHoraActual("T");
       }
-      console.log({ cargaUtil });
+      const respuesta = await VehiculosService.agregarVehiculo(cargaUtil);
+      if (respuesta) {
+        DialogosService.mostrarNotificacionExito("Vehículo registrado");
+        this.detalles = {
+          placas: "",
+          descripcion: "",
+          fechaEntrada: new Date(),
+        };
+      }
     },
   },
 };
