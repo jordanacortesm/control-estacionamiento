@@ -22,4 +22,9 @@ func configurarRutasVehiculos(enrutador *mux.Router) {
 			return true, err
 		})
 	}).Methods(http.MethodPost)
+	enrutador.HandleFunc("/vehiculos", func(w http.ResponseWriter, r *http.Request) {
+		responderHttpConFuncion(w, r, func() (interface{}, error) {
+			return obtenerVehiculos()
+		})
+	}).Methods(http.MethodGet)
 }
