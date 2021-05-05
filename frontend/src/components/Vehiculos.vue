@@ -7,15 +7,38 @@
       >
         Registrar nuevo
       </router-link>
-      <b-field label="Filtrar por fecha">
-        <b-datepicker
-          v-model="fechaSeleccionada"
-          locale="es-MX"
-          placeholder="Selecciona una fecha"
-          icon="calendar-today"
-          close-on-click
-        >
-        </b-datepicker>
+      <b-field
+        grouped
+        message="Selecciona el rango de fechas para ver registros"
+      >
+        <b-field label="Inicio">
+          <b-datepicker
+            ref="seleccionadorFechaInicio"
+            :append-to-body="true"
+            v-model="fechaInicio"
+            @input="onFechaInicioCambiada()"
+            locale="es-MX"
+            placeholder="Selecciona una fecha"
+            :date-formatter="formateadorFecha"
+            icon="calendar-today"
+            close-on-click
+          >
+          </b-datepicker>
+        </b-field>
+        <b-field label="Fin">
+          <b-datepicker
+            :date-formatter="formateadorFecha"
+            ref="seleccionadorFechaFin"
+            :append-to-body="true"
+            v-model="fechaFin"
+            @input="onFechaFinCambiada()"
+            locale="es-MX"
+            placeholder="Selecciona una fecha"
+            icon="calendar-today"
+            close-on-click
+          >
+          </b-datepicker>
+        </b-field>
       </b-field>
       <b-table :data="vehiculos" :loading="cargando" :mobile-cards="true">
         <b-table-column
@@ -55,23 +78,46 @@
 </template>
 <script>
 import VehiculosService from "../services/VehiculosService";
+import Utiles from "../services/Utiles";
 export default {
   data: () => ({
     vehiculos: [],
     cargando: false,
-    fechaSeleccionada: new Date(),
+    fechaInicio: new Date(),
+    fechaFin: new Date(),
+    formateadorFecha: Utiles.formatearFechaSegunLocale,
   }),
   async mounted() {
-    // this.fechaSeleccionada = new Date();
     await this.obtenerVehiculos();
   },
   methods: {
+    onFechaInicioCambiada() {
+      // Hay que ocultarlo cada que se selecciona una fecha, porque no se oculta automáticamente
+      this.$refs.seleccionadorFechaInicio.toggle();
+      this.onFechaCambiada();
+    },
+    onFechaFinCambiada() {
+      // Hay que ocultarlo cada que se selecciona una fecha, porque no se oculta automáticamente
+      this.$refs.seleccionadorFechaFin.toggle();
+      this.onFechaCambiada();
+    },
+    onFechaCambiada() {
+      this.obtenerVehiculos();
+    },
     async eliminarVehiculo(id) {
       console.log("Eliminado el vehículo con id %d", id);
     },
     async obtenerVehiculos() {
       this.cargando = true;
-      this.vehiculos = await VehiculosService.obtenerVehiculos();
+      const fechaInicio = Utiles.formatearFechaAInicioDeDia(
+        this.fechaInicio,
+        "T"
+      );
+      const fechaFin = Utiles.formatearFechaAFinDeDia(this.fechaFin, "T");
+      this.vehiculos = await VehiculosService.obtenerVehiculos(
+        fechaInicio,
+        fechaFin
+      );
       this.cargando = false;
     },
   },

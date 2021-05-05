@@ -24,7 +24,7 @@ func registrarNuevoVehiculo(vehiculo Vehiculo) error {
 	return nil
 }
 
-func obtenerVehiculos() ([]Vehiculo, error) {
+func obtenerVehiculos(fechaInicio, fechaFin string) ([]Vehiculo, error) {
 	vehiculos := []Vehiculo{}
 	bd, err := obtenerBD()
 	if err != nil {
@@ -32,7 +32,7 @@ func obtenerVehiculos() ([]Vehiculo, error) {
 	}
 
 	defer bd.Close()
-	filas, err := bd.Query(`SELECT id, placas, descripcion, fecha_entrada, fecha_salida FROM vehiculos`)
+	filas, err := bd.Query(`SELECT id, placas, descripcion, fecha_entrada, fecha_salida FROM vehiculos WHERE fecha_entrada >= ? AND fecha_entrada <= ?`, fechaInicio, fechaFin)
 	if err != nil {
 		return vehiculos, err
 	}
