@@ -8,6 +8,7 @@ import (
 
 func configurarRutas(enrutador *mux.Router) {
 	configurarRutasVehiculos(enrutador)
+	configurarRutasCostos(enrutador)
 	/*
 	   ____ ___  ____  ____
 	  / ___/ _ \|  _ \/ ___|

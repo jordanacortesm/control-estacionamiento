@@ -10,6 +10,9 @@
         <b-navbar-item tag="router-link" :to="{ name: 'Vehiculos' }"
           >Vehículos</b-navbar-item
         >
+        <b-navbar-item tag="router-link" :to="{ name: 'Ajustes' }"
+          >Ajustar costos</b-navbar-item
+        >
       </template>
 
       <template #end>
