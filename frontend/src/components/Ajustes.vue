@@ -44,7 +44,12 @@
             </b-button>
           </b-field>
         </b-field>
-        <b-button :disabled="!deberiaHabilitarBotonAgregar()" type="is-success" @click="guardarCostos()">Guardar</b-button>
+        <b-button
+          :disabled="!deberiaHabilitarBotonAgregar()"
+          type="is-success"
+          @click="guardarCostos()"
+          >Guardar</b-button
+        >
       </div>
     </div>
   </div>
@@ -81,6 +86,9 @@ export default {
       return this.costos.length > 1;
     },
     deberiaHabilitarBotonAgregar() {
+      if (this.costos.length <= 0) {
+        return false;
+      }
       const ultimoCosto = this.costos[this.costos.length - 1];
       if (isNaN(parseInt(ultimoCosto.minimo))) {
         return false;
