@@ -56,7 +56,10 @@
           {{ props.row.fechaEntrada | formatearFecha }}
         </b-table-column>
         <b-table-column field="fechaSalida" label="Salida" v-slot="props">
-          <b-button v-show="!props.row.fechaSalida" type="is-info"
+          <b-button
+            @click="marcarSalida(props.row)"
+            v-show="!props.row.fechaSalida"
+            type="is-info"
             >Marcar salida</b-button
           >
           <template v-if="props.row.fechaSalida">
@@ -78,19 +81,25 @@
 </template>
 <script>
 import VehiculosService from "../services/VehiculosService";
+import CostosService from "../services/CostosService";
 import Utiles from "../services/Utiles";
 export default {
   data: () => ({
     vehiculos: [],
+    costos: [],
     cargando: false,
     fechaInicio: new Date(),
     fechaFin: new Date(),
     formateadorFecha: Utiles.formatearFechaSegunLocale,
   }),
   async mounted() {
+    await this.obtenerCostos();
     await this.obtenerVehiculos();
   },
   methods: {
+    async obtenerCostos() {
+      this.costos = await CostosService.obtenerCostos();
+    },
     onFechaInicioCambiada() {
       // Hay que ocultarlo cada que se selecciona una fecha, porque no se oculta automáticamente
       this.$refs.seleccionadorFechaInicio.toggle();
@@ -106,6 +115,17 @@ export default {
     },
     async eliminarVehiculo(id) {
       console.log("Eliminado el vehículo con id %d", id);
+    },
+    async marcarSalida(vehiculo) {
+      const { fechaEntrada } = vehiculo;
+      const minutosTranscurridos = Utiles.milisegundosAMinutos(
+        Utiles.restarFechaConFechaActual(fechaEntrada)
+      );
+      const costo = CostosService.calcularCostoSegunTiempo(
+        minutosTranscurridos,
+        this.costos
+      );
+      console.log({ costo,minutosTranscurridos });
     },
     async obtenerVehiculos() {
       this.cargando = true;

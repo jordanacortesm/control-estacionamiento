@@ -1,14 +1,16 @@
 const DIA_EN_MILISEGUNDOS = 1000 * 60 * 60 * 24;
 const HORA_INICIO_DE_DIA = "00:00:00";
 const HORA_FIN_DE_DIA = "23:59:59";
-const formateadorFechaYHora = new Intl.DateTimeFormat('es-MX', { dateStyle: 'medium', timeStyle: 'medium' });
+const formateadorFechaYHora = new Intl.DateTimeFormat('es-MX', { dateStyle: 'medium', timeStyle: 'short' });
 const formateadorFecha = new Intl.DateTimeFormat('es-MX', { dateStyle: 'medium' });
 const Utiles = {
-    restarHorarios(a, b) {
-        const fecha = this.formatearFechaActual();
-        const fechaYHoraA = new Date(fecha + " " + a);
-        const fechaYHoraB = new Date(fecha + " " + b);
-        return fechaYHoraA - fechaYHoraB;
+    milisegundosAMinutos(milisegundos) {
+        return milisegundos / 1000 / 60;
+    },
+    restarFechaConFechaActual(fechaComoCadena) {
+        const ahora = new Date();
+        const fecha = new Date(fechaComoCadena);
+        return ahora - fecha;
     },
     obtenerFechaYHoraActual(separador) {
         return this.obtenerFechaYHora(new Date(), separador);
