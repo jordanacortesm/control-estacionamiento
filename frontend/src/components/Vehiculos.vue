@@ -1,81 +1,98 @@
 <template>
-  <div class="columns">
-    <div class="column">
-      <router-link
-        :to="{ name: 'RegistrarVehiculo' }"
-        class="button is-success mb-2"
+  <div>
+    <div class="columns">
+      <b-modal
+        :active.sync="mostrarModalCobrar"
+        aria-modal
+        aria-role="dialog"
+        has-modal-card
+        :destroy-on-hide="true"
+        trap-focus
       >
-        Registrar nuevo
-      </router-link>
-      <b-field
-        grouped
-        message="Selecciona el rango de fechas para ver registros"
-      >
-        <b-field label="Inicio">
-          <b-datepicker
-            ref="seleccionadorFechaInicio"
-            :append-to-body="true"
-            v-model="fechaInicio"
-            @input="onFechaInicioCambiada()"
-            locale="es-MX"
-            placeholder="Selecciona una fecha"
-            :date-formatter="formateadorFecha"
-            icon="calendar-today"
-            close-on-click
-          >
-          </b-datepicker>
-        </b-field>
-        <b-field label="Fin">
-          <b-datepicker
-            :date-formatter="formateadorFecha"
-            ref="seleccionadorFechaFin"
-            :append-to-body="true"
-            v-model="fechaFin"
-            @input="onFechaFinCambiada()"
-            locale="es-MX"
-            placeholder="Selecciona una fecha"
-            icon="calendar-today"
-            close-on-click
-          >
-          </b-datepicker>
-        </b-field>
-      </b-field>
-      <b-table :data="vehiculos" :loading="cargando" :mobile-cards="true">
-        <b-table-column
-          searchable
-          field="descripcion"
-          label="Descripción"
-          v-slot="props"
+        <Cobrar :vehiculo="vehiculoParaCobrar"></Cobrar>
+      </b-modal>
+      <div class="column">
+        <router-link
+          :to="{ name: 'RegistrarVehiculo' }"
+          class="button is-success mb-2"
         >
-          {{ props.row.descripcion }}
-        </b-table-column>
-        <b-table-column searchable field="placas" label="Placas" v-slot="props">
-          {{ props.row.placas }}
-        </b-table-column>
-        <b-table-column field="fechaEntrada" label="Entrada" v-slot="props">
-          {{ props.row.fechaEntrada | formatearFecha }}
-        </b-table-column>
-        <b-table-column field="fechaSalida" label="Salida" v-slot="props">
-          <b-button
-            @click="marcarSalida(props.row)"
-            v-show="!props.row.fechaSalida"
-            type="is-info"
-            >Marcar salida</b-button
+          Registrar nuevo
+        </router-link>
+        <b-field
+          grouped
+          message="Selecciona el rango de fechas para ver registros"
+        >
+          <b-field label="Inicio">
+            <b-datepicker
+              ref="seleccionadorFechaInicio"
+              :append-to-body="true"
+              v-model="fechaInicio"
+              @input="onFechaInicioCambiada()"
+              locale="es-MX"
+              placeholder="Selecciona una fecha"
+              :date-formatter="formateadorFecha"
+              icon="calendar-today"
+              close-on-click
+            >
+            </b-datepicker>
+          </b-field>
+          <b-field label="Fin">
+            <b-datepicker
+              :date-formatter="formateadorFecha"
+              ref="seleccionadorFechaFin"
+              :append-to-body="true"
+              v-model="fechaFin"
+              @input="onFechaFinCambiada()"
+              locale="es-MX"
+              placeholder="Selecciona una fecha"
+              icon="calendar-today"
+              close-on-click
+            >
+            </b-datepicker>
+          </b-field>
+        </b-field>
+        <b-table :data="vehiculos" :loading="cargando" :mobile-cards="true">
+          <b-table-column
+            searchable
+            field="descripcion"
+            label="Descripción"
+            v-slot="props"
           >
-          <template v-if="props.row.fechaSalida">
-            {{ props.row.fechaSalida | formatearFecha }}
-            <br />Aquí mostrar pago y tiempo
+            {{ props.row.descripcion }}
+          </b-table-column>
+          <b-table-column
+            searchable
+            field="placas"
+            label="Placas"
+            v-slot="props"
+          >
+            {{ props.row.placas }}
+          </b-table-column>
+          <b-table-column field="fechaEntrada" label="Entrada" v-slot="props">
+            {{ props.row.fechaEntrada | formatearFecha }}
+          </b-table-column>
+          <b-table-column field="fechaSalida" label="Salida" v-slot="props">
+            <b-button
+              @click="marcarSalida(props.row)"
+              v-show="!props.row.fechaSalida"
+              type="is-info"
+              >Marcar salida</b-button
+            >
+            <template v-if="props.row.fechaSalida">
+              {{ props.row.fechaSalida | formatearFecha }}
+              <br />Aquí mostrar pago y tiempo
+            </template>
+          </b-table-column>
+          <b-table-column field="id" label="Eliminar" v-slot="props">
+            <b-button @click="eliminarVehiculo(props.row.id)" type="is-danger"
+              >Eliminar</b-button
+            >
+          </b-table-column>
+          <template #empty>
+            <div class="has-text-centered">No hay registros</div>
           </template>
-        </b-table-column>
-        <b-table-column field="id" label="Eliminar" v-slot="props">
-          <b-button @click="eliminarVehiculo(props.row.id)" type="is-danger"
-            >Eliminar</b-button
-          >
-        </b-table-column>
-        <template #empty>
-          <div class="has-text-centered">No hay registros</div>
-        </template>
-      </b-table>
+        </b-table>
+      </div>
     </div>
   </div>
 </template>
@@ -83,7 +100,9 @@
 import VehiculosService from "../services/VehiculosService";
 import CostosService from "../services/CostosService";
 import Utiles from "../services/Utiles";
+import Cobrar from "./Cobrar";
 export default {
+  components: { Cobrar },
   data: () => ({
     vehiculos: [],
     costos: [],
@@ -91,6 +110,8 @@ export default {
     fechaInicio: new Date(),
     fechaFin: new Date(),
     formateadorFecha: Utiles.formatearFechaSegunLocale,
+    mostrarModalCobrar: false,
+    vehiculoParaCobrar: {},
   }),
   async mounted() {
     await this.obtenerCostos();
@@ -117,15 +138,8 @@ export default {
       console.log("Eliminado el vehículo con id %d", id);
     },
     async marcarSalida(vehiculo) {
-      const { fechaEntrada } = vehiculo;
-      const minutosTranscurridos = Utiles.milisegundosAMinutos(
-        Utiles.restarFechaConFechaActual(fechaEntrada)
-      );
-      const costo = CostosService.calcularCostoSegunTiempo(
-        minutosTranscurridos,
-        this.costos
-      );
-      console.log({ costo,minutosTranscurridos });
+      this.vehiculoParaCobrar = vehiculo;
+      this.mostrarModalCobrar = true;
     },
     async obtenerVehiculos() {
       this.cargando = true;

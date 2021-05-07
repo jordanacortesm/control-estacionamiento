@@ -3,7 +3,23 @@ const HORA_INICIO_DE_DIA = "00:00:00";
 const HORA_FIN_DE_DIA = "23:59:59";
 const formateadorFechaYHora = new Intl.DateTimeFormat('es-MX', { dateStyle: 'medium', timeStyle: 'short' });
 const formateadorFecha = new Intl.DateTimeFormat('es-MX', { dateStyle: 'medium' });
+const formateadorDinero = new Intl.NumberFormat("en", { style: "currency", "currency": "MXN" });
 const Utiles = {
+    formatearDinero(cantidad) {
+        return formateadorDinero.format(cantidad);
+    },
+    minutosAHorasYMinutos(minutos) {
+        const horas = Math.floor(minutos / 60);
+        const minutosSobrantes = Math.floor(minutos % 60);
+        let resultado = "";
+        if (horas > 0) {
+            resultado += `${horas} hora(s) `;
+        }
+        if (minutosSobrantes > 0) {
+            resultado += `${minutosSobrantes} minuto(s)`;
+        }
+        return resultado;
+    },
     milisegundosAMinutos(milisegundos) {
         return milisegundos / 1000 / 60;
     },
