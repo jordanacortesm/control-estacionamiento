@@ -7,11 +7,7 @@ import (
 )
 
 func obtenerBD() (*sql.DB, error) {
-	db, err := sql.Open("sqlite3", NombreBaseDeDatos)
-	if err != nil {
-		return nil, err
-	}
-	return db, nil
+	return sql.Open("sqlite3", NombreBaseDeDatos)
 }
 
 func crearTablas() error {
@@ -33,6 +29,13 @@ func crearTablas() error {
 			minimo INTEGER NOT NULL,
 			maximo INTEGER NOT NULL,
 			costo REAL NOT NULL
+		);`,
+		`CREATE TABLE IF NOT EXISTS pagos_vehiculos(
+			id INTEGER PRIMARY KEY AUTOINCREMENT,
+			id_vehiculo INTEGER NOT NULL,
+			costo REAL NOT NULL,
+			minutos INTEGER NOT NULL,
+			FOREIGN KEY(id_vehiculo) REFERENCES vehiculos(id) ON DELETE CASCADE ON UPDATE CASCADE
 		);`,
 	}
 	for _, tabla := range tablas {
