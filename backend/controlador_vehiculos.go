@@ -24,6 +24,18 @@ func registrarNuevoVehiculo(vehiculo Vehiculo) error {
 	return nil
 }
 
+func establecerFechaSalida(IdVehiculo int64, FechaSalida string) error {
+	bd, err := obtenerBD()
+	if err != nil {
+		return err
+	}
+	_, err = bd.Exec("UPDATE vehiculos SET fecha_salida = ? WHERE id = ?", FechaSalida, IdVehiculo)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 func obtenerVehiculos(fechaInicio, fechaFin string) ([]Vehiculo, error) {
 	vehiculos := []Vehiculo{}
 	bd, err := obtenerBD()

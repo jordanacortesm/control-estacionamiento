@@ -33,7 +33,7 @@ func crearTablas() error {
 		`CREATE TABLE IF NOT EXISTS pagos_vehiculos(
 			id INTEGER PRIMARY KEY AUTOINCREMENT,
 			id_vehiculo INTEGER NOT NULL,
-			costo REAL NOT NULL,
+			pago REAL NOT NULL,
 			minutos INTEGER NOT NULL,
 			FOREIGN KEY(id_vehiculo) REFERENCES vehiculos(id) ON DELETE CASCADE ON UPDATE CASCADE
 		);`,

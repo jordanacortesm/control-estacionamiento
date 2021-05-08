@@ -15,18 +15,25 @@ const Utiles = {
         if (horas > 0) {
             resultado += `${horas} hora(s) `;
         }
-        if (minutosSobrantes > 0) {
-            resultado += `${minutosSobrantes} minuto(s)`;
-        }
+        resultado += `${minutosSobrantes} minuto(s)`;
         return resultado;
     },
     milisegundosAMinutos(milisegundos) {
-        return milisegundos / 1000 / 60;
+        return parseInt(milisegundos / 1000 / 60);
     },
     restarFechaConFechaActual(fechaComoCadena) {
         const ahora = new Date();
         const fecha = new Date(fechaComoCadena);
         return ahora - fecha;
+    },
+    restarFechaComoCadenaConFechaDate(fechaComoCadena, otraFecha) {
+        const fecha = new Date(fechaComoCadena);
+        return otraFecha - fecha;
+    },
+    restarFechasComoCadenas(a, b) {
+        const fechaA = new Date(a);
+        const fechaB = new Date(b);
+        return Math.abs(fechaA - fechaB);
     },
     obtenerFechaYHoraActual(separador) {
         return this.obtenerFechaYHora(new Date(), separador);

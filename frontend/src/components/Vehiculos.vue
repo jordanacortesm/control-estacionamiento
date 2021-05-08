@@ -9,7 +9,10 @@
         :destroy-on-hide="true"
         trap-focus
       >
-        <Cobrar :vehiculo="vehiculoParaCobrar"></Cobrar>
+        <Cobrar
+          @cobrado="onCobroTerminado()"
+          :vehiculo="vehiculoParaCobrar"
+        ></Cobrar>
       </b-modal>
       <div class="column">
         <router-link
@@ -80,7 +83,9 @@
             >
             <template v-if="props.row.fechaSalida">
               {{ props.row.fechaSalida | formatearFecha }}
-              <br />Aquí mostrar pago y tiempo
+              <br />
+              <b-icon icon="clock"></b-icon>
+              {{ tiempoTranscurrido(props.row) | minutosAHorasYMinutos }}
             </template>
           </b-table-column>
           <b-table-column field="id" label="Eliminar" v-slot="props">
@@ -98,14 +103,12 @@
 </template>
 <script>
 import VehiculosService from "../services/VehiculosService";
-import CostosService from "../services/CostosService";
 import Utiles from "../services/Utiles";
 import Cobrar from "./Cobrar";
 export default {
   components: { Cobrar },
   data: () => ({
     vehiculos: [],
-    costos: [],
     cargando: false,
     fechaInicio: new Date(),
     fechaFin: new Date(),
@@ -114,12 +117,18 @@ export default {
     vehiculoParaCobrar: {},
   }),
   async mounted() {
-    await this.obtenerCostos();
     await this.obtenerVehiculos();
   },
   methods: {
-    async obtenerCostos() {
-      this.costos = await CostosService.obtenerCostos();
+    tiempoTranscurrido(vehiculo) {
+      const { fechaEntrada, fechaSalida } = vehiculo;
+      return Utiles.milisegundosAMinutos(
+        Utiles.restarFechasComoCadenas(fechaEntrada, fechaSalida)
+      );
+    },
+    async onCobroTerminado() {
+      console.log(" On cobro tgerminado");
+      await this.obtenerVehiculos();
     },
     onFechaInicioCambiada() {
       // Hay que ocultarlo cada que se selecciona una fecha, porque no se oculta automáticamente
