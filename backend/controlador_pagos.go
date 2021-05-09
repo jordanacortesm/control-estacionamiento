@@ -13,6 +13,39 @@ type PagoDeVehiculoConFechaSalida struct {
 	FechaSalida    string         `json:"fechaSalida"`
 }
 
+type VehiculoConPago struct {
+	Vehiculo       Vehiculo       `json:"vehiculo"`
+	PagoDeVehiculo PagoDeVehiculo `json:"pagoDeVehiculo"`
+}
+
+func obtenerVehiculosConPagos(fechaInicio, fechaFin string) ([]VehiculoConPago, error) {
+	vehiculos := []VehiculoConPago{}
+	bd, err := obtenerBD()
+	if err != nil {
+		return vehiculos, err
+	}
+
+	defer bd.Close()
+	filas, err := bd.Query(`select v.placas, v.descripcion, v.fecha_entrada, v.fecha_salida, pv.pago, pv.minutos from pagos_vehiculos pv
+inner join vehiculos v
+on v.id = pv.id_vehiculo
+where v.fecha_entrada >= ?
+AND v.fecha_entrada <= ?`, fechaInicio, fechaFin)
+	if err != nil {
+		return vehiculos, err
+	}
+	defer filas.Close()
+	var v VehiculoConPago
+	for filas.Next() {
+		err := filas.Scan(&v.Vehiculo.Placas, &v.Vehiculo.Descripcion, &v.Vehiculo.FechaEntrada, &v.Vehiculo.FechaSalida, &v.PagoDeVehiculo.Pago, &v.PagoDeVehiculo.Minutos)
+		if err != nil {
+			return vehiculos, err
+		}
+		vehiculos = append(vehiculos, v)
+	}
+	return vehiculos, nil
+}
+
 func guardarPago(pago PagoDeVehiculoConFechaSalida) error {
 	err := establecerFechaSalida(pago.PagoDeVehiculo.IdVehiculo, pago.FechaSalida)
 	if err != nil {

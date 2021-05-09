@@ -54,7 +54,7 @@
             </b-datepicker>
           </b-field>
         </b-field>
-        <b-table :data="vehiculos" :loading="cargando" :mobile-cards="true">
+        <b-table :data="vehiculos" :loading="cargando" :mobile-cards="true" hoverable>
           <b-table-column
             searchable
             field="descripcion"
@@ -127,7 +127,6 @@ export default {
       );
     },
     async onCobroTerminado() {
-      console.log(" On cobro tgerminado");
       await this.obtenerVehiculos();
     },
     onFechaInicioCambiada() {

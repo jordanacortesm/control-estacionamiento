@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import Vehiculos from '@/components/Vehiculos'
 import RegistrarVehiculo from '@/components/RegistrarVehiculo'
 import Ajustes from '@/components/Ajustes'
+import ReporteVehiculos from '@/components/ReporteVehiculos'
 
 Vue.use(Router);
 
@@ -22,6 +23,11 @@ export default new Router({
             path: '/ajustes',
             name: 'Ajustes',
             component: Ajustes,
+        },
+        {
+            path: '/reporte-vehiculos',
+            name: 'ReporteVehiculos',
+            component: ReporteVehiculos,
         },
     ]
 });
