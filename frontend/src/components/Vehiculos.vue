@@ -60,6 +60,7 @@
             field="descripcion"
             label="Descripción"
             v-slot="props"
+            sortable
           >
             {{ props.row.descripcion }}
           </b-table-column>
@@ -67,14 +68,15 @@
             searchable
             field="placas"
             label="Placas"
+            sortable
             v-slot="props"
           >
             {{ props.row.placas }}
           </b-table-column>
-          <b-table-column field="fechaEntrada" label="Entrada" v-slot="props">
+          <b-table-column field="fechaEntrada" label="Entrada" v-slot="props" sortable>
             {{ props.row.fechaEntrada | formatearFecha }}
           </b-table-column>
-          <b-table-column field="fechaSalida" label="Salida" v-slot="props">
+          <b-table-column field="fechaSalida" label="Salida" v-slot="props" sortable>
             <b-button
               @click="marcarSalida(props.row)"
               v-show="!props.row.fechaSalida"

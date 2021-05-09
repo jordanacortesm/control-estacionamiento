@@ -43,30 +43,47 @@
         >
           <b-table-column
             searchable
-            field="descripcion"
+            field="vehiculo.descripcion"
             label="Descripción"
             v-slot="props"
+            sortable
           >
             {{ props.row.vehiculo.descripcion }}
           </b-table-column>
           <b-table-column
             searchable
-            field="placas"
+            field="vehiculo.placas"
+            sortable
             label="Placas"
             v-slot="props"
           >
             {{ props.row.vehiculo.placas }}
           </b-table-column>
-          <b-table-column field="fechaEntrada" label="Entrada" v-slot="props">
+          <b-table-column
+            field="vehiculo.fechaEntrada"
+            label="Entrada"
+            v-slot="props"
+            sortable
+          >
             {{ props.row.vehiculo.fechaEntrada | formatearFecha }}
           </b-table-column>
-          <b-table-column field="fechaSalida" label="Salida" v-slot="props">
+          <b-table-column
+            field="vehiculo.fechaSalida"
+            label="Salida"
+            v-slot="props"
+            sortable
+          >
             {{ props.row.vehiculo.fechaSalida | formatearFecha }}
           </b-table-column>
-          <b-table-column field="minutos" label="Tiempo" v-slot="props">
+          <b-table-column
+            field="pagoDeVehiculo.minutos"
+            label="Tiempo"
+            v-slot="props"
+            sortable
+          >
             {{ props.row.pagoDeVehiculo.minutos | minutosAHorasYMinutos }}
           </b-table-column>
-          <b-table-column field="pago" label="Pago" v-slot="props">
+          <b-table-column field="pagoDeVehiculo.pago" label="Pago" v-slot="props" sortable>
             {{ props.row.pagoDeVehiculo.pago | dinero }}
           </b-table-column>
           <template #empty>
