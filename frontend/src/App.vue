@@ -16,6 +16,9 @@
         <b-navbar-item tag="router-link" :to="{ name: 'ReporteVehiculos' }"
           >Reporte</b-navbar-item
         >
+        <b-navbar-item tag="router-link" :to="{ name: 'Escritorio' }"
+          >Escritorio</b-navbar-item
+        >
       </template>
 
       <template #end>

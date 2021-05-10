@@ -4,6 +4,7 @@ import Vehiculos from '@/components/Vehiculos'
 import RegistrarVehiculo from '@/components/RegistrarVehiculo'
 import Ajustes from '@/components/Ajustes'
 import ReporteVehiculos from '@/components/ReporteVehiculos'
+import Escritorio from '@/components/Escritorio'
 
 Vue.use(Router);
 
@@ -28,6 +29,11 @@ export default new Router({
             path: '/reporte-vehiculos',
             name: 'ReporteVehiculos',
             component: ReporteVehiculos,
+        },
+        {
+            path: '/escritorio',
+            name: 'Escritorio',
+            component: Escritorio,
         },
     ]
 });

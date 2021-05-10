@@ -10,6 +10,7 @@ func configurarRutas(enrutador *mux.Router) {
 	configurarRutasVehiculos(enrutador)
 	configurarRutasAjustes(enrutador)
 	configurarRutasPagos(enrutador)
+	configurarRutasEscritorio(enrutador)
 	/*
 	   ____ ___  ____  ____
 	  / ___/ _ \|  _ \/ ___|
