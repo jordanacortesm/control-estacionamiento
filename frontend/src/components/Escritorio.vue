@@ -2,10 +2,61 @@
   <div>
     <div class="columns">
       <div class="column">
-        <p>Escritorio</p>
-        {{ estadisticasHoy }}
-        <strong>Mes:</strong>
-        {{ estadisticasMes }}
+        <div class="card">
+          <header class="card-header">
+            <p class="card-header-title">Hoy</p>
+          </header>
+          <div class="card-content">
+            <div class="content">
+              <h2 class="is-size-3">
+                <b-icon icon="cash" size="is-large"></b-icon>
+                {{ estadisticasHoy.recaudado | dinero }}
+              </h2>
+
+              <h2 class="is-size-4">
+                <b-icon icon="car" size="is-medium"></b-icon>
+                {{ estadisticasHoy.conteo }} vehículo(s)
+              </h2>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="column">
+        <div class="card">
+          <header class="card-header">
+            <p class="card-header-title">Este mes</p>
+          </header>
+          <div class="card-content">
+            <div class="content">
+              <h2 class="is-size-3">
+                <b-icon icon="cash" size="is-large"></b-icon>
+                {{ estadisticasMes.recaudado | dinero }}
+              </h2>
+              <h2 class="is-size-4">
+                <b-icon icon="car" size="is-medium"></b-icon>
+                {{ estadisticasMes.conteo }} vehículo(s)
+              </h2>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="columns">
+      <div class="column">
+        <div class="card">
+          <header class="card-header">
+            <p class="card-header-title">Recaudado este mes</p>
+          </header>
+          <div class="card-content"></div>
+        </div>
+      </div>
+      <div class="column">
+        <div class="card">
+          <header class="card-header">
+            <p class="card-header-title">Recaudado este año</p>
+          </header>
+          <div class="card-content"></div>
+        </div>
       </div>
     </div>
   </div>
