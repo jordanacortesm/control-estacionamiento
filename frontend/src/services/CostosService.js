@@ -1,18 +1,29 @@
+const MINUTOS_EN_UNA_HORA = 60;
 import HttpService from "./HttpService";
+
 const CostosService = {
-    async guardarCostos(costos) {
-        return await HttpService.post("/costos", costos);
+    async guardarAjustesCostos(costoHora, minutosRedondear, tolerancia) {
+        const payload = { costoHora, minutosRedondear, tolerancia };
+        return await HttpService.post("/ajustes_costos", payload);
     },
-    async obtenerCostos() {
-        return await HttpService.get("/costos");
+    async obtenerAjustesCostos() {
+        return await HttpService.get("/ajustes_costos");
     },
-    calcularCostoSegunTiempo(minutos, costos) {
-        for (const costo of costos) {
-            if (minutos >= costo.minimo && minutos <= costo.maximo) {
-                return costo.costo;
-            }
+    calcularCosto(minutos, costoPorHora, minutosRedondear, tolerancia) {
+        let minutosVerdaderos = minutos;
+        let diferencia = 0;
+        if (minutosRedondear > 0) {
+            diferencia = (minutos % minutosRedondear);
         }
-        return 0;
+        if (diferencia > tolerancia) {
+            minutosVerdaderos = minutosVerdaderos - diferencia + minutosRedondear;
+        } else {
+            minutosVerdaderos = minutosVerdaderos - diferencia;
+        }
+        if (minutosVerdaderos < minutosRedondear) {
+            minutosVerdaderos = minutosRedondear;
+        }
+        return (minutosVerdaderos / MINUTOS_EN_UNA_HORA) * costoPorHora;
     },
 };
 export default CostosService;

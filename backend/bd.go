@@ -24,11 +24,10 @@ func crearTablas() error {
 			fecha_entrada TEXT NOT NULL,
 			fecha_salida TEXT NOT NULL DEFAULT ""
 		);`,
-		`CREATE TABLE IF NOT EXISTS costos_por_tiempo(
-			id INTEGER PRIMARY KEY AUTOINCREMENT,
-			minimo INTEGER NOT NULL,
-			maximo INTEGER NOT NULL,
-			costo REAL NOT NULL
+		`CREATE TABLE IF NOT EXISTS ajustes_costo(
+			costo_hora REAL NOT NULL,
+			minutos_redondear INTEGER NOT NULL,
+			minutos_tolerancia INTEGER NOT NULL
 		);`,
 		`CREATE TABLE IF NOT EXISTS pagos_vehiculos(
 			id INTEGER PRIMARY KEY AUTOINCREMENT,

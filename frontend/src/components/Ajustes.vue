@@ -3,47 +3,47 @@
     <div class="columns">
       <div class="column">
         <h2 class="is-size-2">Ajustes</h2>
-        <b-field v-for="(costo, i) in costos" :key="i" grouped>
-          <b-field label="Si el tiempo en minutos está entre:">
+        <b-field grouped>
+          <b-field label="Costo por hora">
             <b-input
-              v-model.number="costo.minimo"
+              placeholder="Ingrese el costo por hora"
               type="number"
-              placeholder="Mínimo"
+              v-model.number="ajustes.costoHora"
             ></b-input>
           </b-field>
-          <b-field label="y:">
+          <b-field label="Redondear">
+            <b-select v-model.number="ajustes.minutosRedondear">
+              <option
+                :value="opcion"
+                v-for="(opcion, i) in opcionesRedondeo"
+                :key="i"
+              >
+                Próximos {{ opcion }} minuto(s)
+              </option>
+            </b-select>
+          </b-field>
+          <b-field label="Tolerancia en minutos:">
             <b-input
-              v-model.number="costo.maximo"
               type="number"
-              placeholder="Máximo"
+              v-model.number="ajustes.tolerancia"
+              placeholder="Tolerancia en minutos"
             ></b-input>
-          </b-field>
-          <b-field label="El costo es:">
-            <b-input
-              v-model.number="costo.costo"
-              type="number"
-              placeholder="Costo"
-            ></b-input>
-          </b-field>
-          <b-field label="‎">
-            <b-button
-              :disabled="!deberiaHabilitarBotonEliminar()"
-              @click="eliminarCosto(i)"
-              type="is-danger"
-            >
-              <b-icon icon="delete"></b-icon>
-            </b-button>
-          </b-field>
-          <b-field v-if="deberiaMostrarBotonAgregar(i)" label="‎">
-            <b-button
-              @click="agregarCosto()"
-              :disabled="!deberiaHabilitarBotonAgregar()"
-              type="is-primary"
-            >
-              <b-icon icon="plus"></b-icon>
-            </b-button>
           </b-field>
         </b-field>
+        <b-field label="Puede mover el deslizador para ver una simulación">
+          <b-slider
+            type="is-info"
+            v-model="minutosSimulador"
+            :min="0"
+            :max="300"
+          ></b-slider>
+        </b-field>
+        <b-notification type="is-primary">
+          Según los ajustes, por
+          <strong>{{ minutosSimulador | minutosAHorasYMinutos }}</strong> el
+          costo es de
+          <strong>{{ costoSimulacion() | dinero }}</strong>
+        </b-notification>
         <b-button
           :disabled="!deberiaHabilitarBotonAgregar()"
           type="is-success"
@@ -59,55 +59,42 @@ import CostosService from "../services/CostosService";
 import DialogosService from "../services/DialogosService";
 export default {
   data: () => ({
-    costos: [],
+    opcionesRedondeo: [0, 10, 15, 30, 60],
+    ajustes: {
+      costoHora: null,
+      minutosRedondear: null,
+      tolerancia: null,
+    },
+    minutosSimulador: 60,
   }),
   async mounted() {
-    await this.obtenerCostos();
+    this.ajustes.minutosRedondear = this.opcionesRedondeo[0];
+    await this.obtenerAjustesCostos();
   },
   methods: {
+    costoSimulacion() {
+      const costo = CostosService.calcularCosto(
+        this.minutosSimulador,
+        this.ajustes.costoHora,
+        this.ajustes.minutosRedondear,
+        this.ajustes.tolerancia
+      );
+      return costo;
+    },
+
     async guardarCostos() {
-      await CostosService.guardarCostos(this.costos);
+      await CostosService.guardarAjustesCostos(
+        this.ajustes.costoHora,
+        this.ajustes.minutosRedondear,
+        this.ajustes.tolerancia
+      );
       DialogosService.mostrarNotificacionExito("Costos guardados");
     },
-    eliminarCosto(indice) {
-      this.costos.splice(indice, 1);
-    },
-    agregarCosto() {
-      this.costos.push({
-        minimo: null,
-        maximo: null,
-        costo: null,
-      });
-    },
-    deberiaMostrarBotonAgregar(indice) {
-      return indice === this.costos.length - 1;
-    },
-    deberiaHabilitarBotonEliminar() {
-      return this.costos.length > 1;
-    },
     deberiaHabilitarBotonAgregar() {
-      if (this.costos.length <= 0) {
-        return false;
-      }
-      const ultimoCosto = this.costos[this.costos.length - 1];
-      if (isNaN(parseInt(ultimoCosto.minimo))) {
-        return false;
-      }
-      if (isNaN(parseInt(ultimoCosto.maximo))) {
-        return false;
-      }
-      if (isNaN(parseFloat(ultimoCosto.costo))) {
-        return false;
-      }
-
       return true;
     },
-    async obtenerCostos() {
-      this.costos = await CostosService.obtenerCostos();
-      // Si no hay costos, agregamos uno vacío para que se muestre el formulario
-      if (this.costos.length <= 0) {
-        this.agregarCosto();
-      }
+    async obtenerAjustesCostos() {
+      this.ajustes = await CostosService.obtenerAjustesCostos();
     },
   },
 };
