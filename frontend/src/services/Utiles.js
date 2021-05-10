@@ -15,7 +15,9 @@ const Utiles = {
         if (horas > 0) {
             resultado += `${horas} hora(s) `;
         }
-        resultado += `${minutosSobrantes} minuto(s)`;
+        if (horas < 1 || minutosSobrantes > 0) {
+            resultado += `${minutosSobrantes} minuto(s)`;
+        }
         return resultado;
     },
     milisegundosAMinutos(milisegundos) {
