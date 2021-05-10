@@ -57,6 +57,7 @@ import Utiles from "../services/Utiles";
 export default {
   props: ["vehiculo"],
   data: () => ({
+    ajustesCostos: {},
     costo: null,
     costoSugerido: null,
     minutosTranscurridos: null,
@@ -66,7 +67,7 @@ export default {
   async mounted() {
     // El mounted es invocado cuando el modal se muestra desde el padre. Aquí ya podemos acceder a los detalles del vehículo
     this.$refs.pagoDelCliente.focus();
-    await this.obtenerCostos();
+    await this.obtenerAjustesCostos();
     this.calcularCosto();
   },
   methods: {
@@ -100,8 +101,8 @@ export default {
     cerrar() {
       this.$parent.close();
     },
-    async obtenerCostos() {
-      this.costos = await CostosService.obtenerCostos();
+    async obtenerAjustesCostos() {
+      this.ajustesCostos = await CostosService.obtenerAjustesCostos();
     },
     calcularCosto() {
       const { fechaEntrada } = this.vehiculo;
@@ -115,9 +116,11 @@ export default {
         milisegundosTranscurridos
       );
       this.minutosTranscurridos = minutosTranscurridos;
-      this.costo = this.costoSugerido = CostosService.calcularCostoSegunTiempo(
+      this.costo = this.costoSugerido = CostosService.calcularCosto(
         minutosTranscurridos,
-        this.costos
+        this.ajustesCostos.costoHora,
+        this.ajustesCostos.minutosRedondear,
+        this.ajustesCostos.tolerancia
       );
     },
   },
