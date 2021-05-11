@@ -22,6 +22,10 @@
           ><b-icon icon="cog-outline" class="mr-1"></b-icon>
           Ajustes</b-navbar-item
         >
+        <b-navbar-item tag="router-link" :to="{ name: 'AcercaDe' }"
+          ><b-icon icon="information" class="mr-1"></b-icon>
+          Acerca de</b-navbar-item
+        >
       </template>
 
       <template #end>

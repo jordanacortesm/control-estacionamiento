@@ -5,6 +5,7 @@ import RegistrarVehiculo from '@/components/RegistrarVehiculo'
 import Ajustes from '@/components/Ajustes'
 import ReporteVehiculos from '@/components/ReporteVehiculos'
 import Escritorio from '@/components/Escritorio'
+import AcercaDe from '@/components/AcercaDe'
 
 Vue.use(Router);
 
@@ -34,6 +35,11 @@ export default new Router({
             path: '/escritorio',
             name: 'Escritorio',
             component: Escritorio,
+        },
+        {
+            path: '/acerca-de',
+            name: 'AcercaDe',
+            component: AcercaDe,
         },
     ]
 });
