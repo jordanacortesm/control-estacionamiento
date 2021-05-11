@@ -15,7 +15,7 @@ run:
 
 prod:
 	# Si vas a compilar para 32 bits, probablemente quieras:
-	# SET PATH=C:\Go32\go\bin;%PATH% && SET GOROOT=C:\Go32\go\
+	# SET PATH=C:\Go32\go\bin;C:\MinGW\bin;%PATH% && SET GOROOT=C:\Go32\go\
 	# Instalando dependencias
 	${GO} mod tidy
 	# Formateando
@@ -25,7 +25,7 @@ prod:
 
 prod_32:
 	# Si vas a compilar para 32 bits, probablemente quieras:
-	# SET PATH=C:\Go32\go\bin;%PATH% && SET GOROOT=C:\Go32\go\
+	# SET PATH=C:\Go32\go\bin;C:\MinGW\bin;%PATH% && SET GOROOT=C:\Go32\go\
 	# Instalando dependencias
 	${GO} mod tidy
 	# Formateando

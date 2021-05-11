@@ -26,6 +26,16 @@ func configurarRutas(enrutador *mux.Router) {
 		}).Methods(http.MethodOptions)
 		enrutador.Use(middlewareCors)
 	}
+	if EstamosEnProduccion {
+		enrutador.PathPrefix(PrefijoRutaServirContenidoEstatico).
+			Handler(
+				http.StripPrefix(PrefijoRutaServirContenidoEstatico,
+					http.FileServer(
+						http.Dir(DirectorioContenidoEstatico),
+					),
+				),
+			)
+	}
 }
 
 func middlewareCors(siguienteManejador http.Handler) http.Handler {
