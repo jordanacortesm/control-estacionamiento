@@ -36,6 +36,9 @@ func crearTablas() error {
 			minutos INTEGER NOT NULL,
 			FOREIGN KEY(id_vehiculo) REFERENCES vehiculos(id) ON DELETE CASCADE ON UPDATE CASCADE
 		);`,
+		`CREATE TABLE IF NOT EXISTS ajustes_impresora(
+			nombre_impresora TEXT NOT NULL
+		);`,
 	}
 	for _, tabla := range tablas {
 		_, err = db.Exec(tabla)

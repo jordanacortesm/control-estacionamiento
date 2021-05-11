@@ -1,6 +1,16 @@
 import Impresora from "./Impresora";
 import Utiles from "./Utiles";
 const TicketService = {
+    async imprimirTicketPrueba(impresora){
+        const i = new Impresora();
+        i.setAlign("center");
+        i.write("Si puede leer esto, ha configurado correctamente su impresora. No olvide guardar los ajustes :)");
+        i.feed(1);
+        i.imprimirEnImpresora(impresora);
+    },
+    async obtenerImpresoras() {
+        return await Impresora.getImpresoras();
+    },
     async imprimirTicketEntrada(vehiculo, nombreImpresora) {
         const i = new Impresora();
         i.setAlign("center");
@@ -26,6 +36,7 @@ const TicketService = {
         i.setFontSize(1, 2);
         i.setAlign("center");
         i.write("Por favor, conserve este comprobante")
+        i.setFontSize(1, 1);
         i.feed(3);
         i.cut();
         i.cutPartial();

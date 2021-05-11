@@ -6,6 +6,58 @@ type AjusteCosto struct {
 	Tolerancia       int64   `json:"tolerancia"`
 }
 
+func guardarImpresora(impresora string) error {
+	err := eliminarAjustesImpresora()
+	if err != nil {
+		return err
+	}
+	bd, err := obtenerBD()
+	if err != nil {
+		return err
+	}
+
+	defer bd.Close()
+	_, err = bd.Exec(`INSERT INTO ajustes_impresora(nombre_impresora)
+	VALUES
+	(?)`, impresora)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func eliminarAjustesImpresora() error {
+	bd, err := obtenerBD()
+	if err != nil {
+		return err
+	}
+
+	defer bd.Close()
+	_, err = bd.Exec(`DELETE FROM ajustes_impresora`)
+	return err
+}
+func obtenerImpresora() (string, error) {
+	var impresora string
+	bd, err := obtenerBD()
+	if err != nil {
+		return impresora, err
+	}
+
+	defer bd.Close()
+	filas, err := bd.Query(`SELECT nombre_impresora FROM ajustes_impresora`)
+	if err != nil {
+		return impresora, err
+	}
+	defer filas.Close()
+	for filas.Next() {
+		err := filas.Scan(&impresora)
+		if err != nil {
+			return impresora, err
+		}
+	}
+	return impresora, nil
+}
+
 func guardarAjustes(ajuste AjusteCosto) error {
 	err := eliminarAjustesCosto()
 	if err != nil {

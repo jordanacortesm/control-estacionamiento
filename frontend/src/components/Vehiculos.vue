@@ -135,6 +135,7 @@ import Utiles from "../services/Utiles";
 import Cobrar from "./Cobrar";
 import DialogosService from "../services/DialogosService";
 import PagosService from "../services/PagosService";
+import AjustesImpresoraService from "../services/AjustesImpresoraService";
 export default {
   components: { Cobrar },
   data: () => ({
@@ -145,14 +146,22 @@ export default {
     formateadorFecha: Utiles.formatearFechaSegunLocale,
     mostrarModalCobrar: false,
     vehiculoParaCobrar: {},
+    impresoraSeleccionada: "",
   }),
   async mounted() {
+    await this.obtenerImpresora();
     await this.obtenerVehiculos();
   },
   methods: {
+    async obtenerImpresora() {
+      this.impresoraSeleccionada = await AjustesImpresoraService.obtenerImpresora();
+    },
     async imprimirTicketEntrada(vehiculo) {
       try {
-        await TicketService.imprimirTicketEntrada(vehiculo, "termica");
+        await TicketService.imprimirTicketEntrada(
+          vehiculo,
+          this.impresoraSeleccionada
+        );
         DialogosService.mostrarNotificacionExito(
           "Ticket impreso correctamente"
         );
@@ -170,7 +179,7 @@ export default {
       try {
         await TicketService.imprimirTicketSalida(
           vehiculo,
-          "termica",
+          this.impresoraSeleccionada,
           minutos,
           pago
         );
