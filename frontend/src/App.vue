@@ -23,8 +23,8 @@
           Ajustes</b-navbar-item
         >
         <b-navbar-item tag="router-link" :to="{ name: 'AcercaDe' }"
-          ><b-icon icon="information" class="mr-1"></b-icon>
-          Acerca de</b-navbar-item
+          ><b-icon icon="information" class="mr-1"></b-icon> Acerca
+          de</b-navbar-item
         >
       </template>
 
@@ -42,6 +42,17 @@
     <section class="section">
       <router-view></router-view>
     </section>
+    <footer class="footer">
+      <div class="content has-text-centered">
+        <p>
+          <strong
+            >Programa para el control de estacionamientos / parqueaderos </strong
+          >creado y mantenido con
+          <b-icon icon="heart" type="is-danger"></b-icon> por
+          <a href="https://parzibyte.me/blog">Parzibyte</a>
+        </p>
+      </div>
+    </footer>
   </div>
 </template>
 
