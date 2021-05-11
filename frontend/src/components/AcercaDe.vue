@@ -44,6 +44,13 @@
           <p>A continuación respondo algunas preguntas</p>
           <ol>
             <li>
+              <strong>¿Puedo usar el sistema en red?</strong> Sí, simplemente
+              coloque la IP de esta computadora en el navegador web de la otra
+              computadora desde donde quiere acceder. Por ejemplo, si la IP de
+              la computadora en donde se ejecuta el software es 192.168.1.22
+              entonces coloque <code>http://192.168.1.22:5000/static/</code>
+            </li>
+            <li>
               <strong>La impresión no funciona.</strong> Asegúrese de instalar y
               compartir la impresora, así como de ejecutar el plugin
             </li>
