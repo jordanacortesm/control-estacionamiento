@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"net/http"
+	"strconv"
 
 	"github.com/gorilla/mux"
 )
@@ -34,6 +35,17 @@ func configurarRutasPagos(enrutador *mux.Router) {
 			}
 			fechaInicio, fechaFin := fechaInicioArreglo[0], fechaFinArreglo[0]
 			return obtenerVehiculosConPagos(fechaInicio, fechaFin)
+		})
+	}).Methods(http.MethodGet)
+	enrutador.HandleFunc("/pago_vehiculo", func(w http.ResponseWriter, r *http.Request) {
+		responderHttpConFuncion(w, r, func() (interface{}, error) {
+			variablesGet := r.URL.Query()
+			idVehiculoArreglo := variablesGet["id"]
+			if len(idVehiculoArreglo) <= 0 {
+				return nil, errors.New("no hay id de vehículo")
+			}
+			idVehiculo, _ := strconv.ParseInt(idVehiculoArreglo[0], 10, 64)
+			return obtenerPagoDeVehiculoPorId(idVehiculo)
 		})
 	}).Methods(http.MethodGet)
 }

@@ -12,5 +12,8 @@ const PagosService = {
     async obtenerPagos(fechaInicio, fechaFin) {
         return await HttpService.get(`/pagos_vehiculos?fechaInicio=${fechaInicio}&fechaFin=${fechaFin}`);
     },
+    async obtenerPagoPorIdVehiculo(idVehiculo) {
+        return await HttpService.get(`/pago_vehiculo?id=${idVehiculo}`);
+    },
 };
 export default PagosService;

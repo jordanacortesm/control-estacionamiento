@@ -89,3 +89,24 @@ func obtenerPagosDeVehiculos() ([]PagoDeVehiculo, error) {
 	}
 	return pagos, nil
 }
+
+func obtenerPagoDeVehiculoPorId(idVehiculo int64) (PagoDeVehiculo, error) {
+	var pago PagoDeVehiculo
+	bd, err := obtenerBD()
+	if err != nil {
+		return pago, err
+	}
+	defer bd.Close()
+	filas, err := bd.Query(`SELECT id, id_vehiculo, pago, minutos FROM pagos_vehiculos WHERE id_vehiculo = ?`, idVehiculo)
+	if err != nil {
+		return pago, err
+	}
+	defer filas.Close()
+	for filas.Next() {
+		err := filas.Scan(&pago.Id, &pago.IdVehiculo, &pago.Pago, &pago.Minutos)
+		if err != nil {
+			return pago, err
+		}
+	}
+	return pago, nil
+}

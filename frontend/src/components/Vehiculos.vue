@@ -105,6 +105,21 @@
               {{ tiempoTranscurrido(props.row) | minutosAHorasYMinutos }}
             </template>
           </b-table-column>
+          <b-table-column field="id" label="Imprimir ticket" v-slot="props">
+            <b-button
+              class="mb-1"
+              @click="imprimirTicketEntrada(props.row)"
+              type="is-info"
+              >Entrada</b-button
+            >
+            &nbsp;
+            <b-button
+              v-show="props.row.fechaSalida"
+              @click="imprimirTicketSalida(props.row)"
+              type="is-primary"
+              >Salida</b-button
+            >
+          </b-table-column>
           <template #empty>
             <div class="has-text-centered">No hay registros</div>
           </template>
@@ -115,8 +130,11 @@
 </template>
 <script>
 import VehiculosService from "../services/VehiculosService";
+import TicketService from "../services/TicketService";
 import Utiles from "../services/Utiles";
 import Cobrar from "./Cobrar";
+import DialogosService from "../services/DialogosService";
+import PagosService from "../services/PagosService";
 export default {
   components: { Cobrar },
   data: () => ({
@@ -132,6 +150,39 @@ export default {
     await this.obtenerVehiculos();
   },
   methods: {
+    async imprimirTicketEntrada(vehiculo) {
+      try {
+        await TicketService.imprimirTicketEntrada(vehiculo, "termica");
+        DialogosService.mostrarNotificacionExito(
+          "Ticket impreso correctamente"
+        );
+      } catch (e) {
+        DialogosService.mostrarNotificacionError(
+          "Error imprimiendo ticket. Asegúrese de haber configurado su impresora y de que el plugin se esté ejecutando"
+        );
+      }
+    },
+    async imprimirTicketSalida(vehiculo) {
+      const detallesPago = await PagosService.obtenerPagoPorIdVehiculo(
+        vehiculo.id
+      );
+      const { pago, minutos } = detallesPago;
+      try {
+        await TicketService.imprimirTicketSalida(
+          vehiculo,
+          "termica",
+          minutos,
+          pago
+        );
+        DialogosService.mostrarNotificacionExito(
+          "Ticket impreso correctamente"
+        );
+      } catch (e) {
+        DialogosService.mostrarNotificacionError(
+          "Error imprimiendo ticket. Asegúrese de haber configurado su impresora y de que el plugin se esté ejecutando"
+        );
+      }
+    },
     tiempoTranscurrido(vehiculo) {
       const { fechaEntrada, fechaSalida } = vehiculo;
       return Utiles.milisegundosAMinutos(
