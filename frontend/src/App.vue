@@ -8,24 +8,24 @@
       </template>
       <template #start>
         <b-navbar-item tag="router-link" :to="{ name: 'Vehiculos' }"
-          >Vehículos</b-navbar-item
-        >
-        <b-navbar-item tag="router-link" :to="{ name: 'Ajustes' }"
-          >Ajustar costos</b-navbar-item
+          ><b-icon icon="car" class="mr-1"></b-icon>Vehículos</b-navbar-item
         >
         <b-navbar-item tag="router-link" :to="{ name: 'ReporteVehiculos' }"
-          >Reporte</b-navbar-item
+          ><b-icon icon="table-check" class="mr-1"></b-icon> Reporte</b-navbar-item
         >
         <b-navbar-item tag="router-link" :to="{ name: 'Escritorio' }"
-          >Escritorio</b-navbar-item
+          ><b-icon icon="monitor-dashboard" class="mr-1"></b-icon> Escritorio</b-navbar-item
+        >
+        <b-navbar-item tag="router-link" :to="{ name: 'Ajustes' }"
+          ><b-icon icon="cog-outline" class="mr-1"></b-icon> Ajustar costos</b-navbar-item
         >
       </template>
 
       <template #end>
         <b-navbar-item tag="div">
           <div class="buttons">
-            <a class="button is-primary">
-              <b-icon icon="star"></b-icon>
+            <a class="button is-danger">
+              <b-icon icon="help"></b-icon>
               <strong>Ayuda y soporte</strong>
             </a>
           </div>

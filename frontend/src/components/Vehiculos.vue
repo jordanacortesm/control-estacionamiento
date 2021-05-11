@@ -54,7 +54,12 @@
             </b-datepicker>
           </b-field>
         </b-field>
-        <b-table :data="vehiculos" :loading="cargando" :mobile-cards="true" hoverable>
+        <b-table
+          :data="vehiculos"
+          :loading="cargando"
+          :mobile-cards="true"
+          hoverable
+        >
           <b-table-column
             searchable
             field="descripcion"
@@ -73,10 +78,20 @@
           >
             {{ props.row.placas }}
           </b-table-column>
-          <b-table-column field="fechaEntrada" label="Entrada" v-slot="props" sortable>
+          <b-table-column
+            field="fechaEntrada"
+            label="Entrada"
+            v-slot="props"
+            sortable
+          >
             {{ props.row.fechaEntrada | formatearFecha }}
           </b-table-column>
-          <b-table-column field="fechaSalida" label="Salida" v-slot="props" sortable>
+          <b-table-column
+            field="fechaSalida"
+            label="Salida"
+            v-slot="props"
+            sortable
+          >
             <b-button
               @click="marcarSalida(props.row)"
               v-show="!props.row.fechaSalida"
@@ -89,11 +104,6 @@
               <b-icon icon="clock"></b-icon>
               {{ tiempoTranscurrido(props.row) | minutosAHorasYMinutos }}
             </template>
-          </b-table-column>
-          <b-table-column field="id" label="Eliminar" v-slot="props">
-            <b-button @click="eliminarVehiculo(props.row.id)" type="is-danger"
-              >Eliminar</b-button
-            >
           </b-table-column>
           <template #empty>
             <div class="has-text-centered">No hay registros</div>
@@ -143,9 +153,6 @@ export default {
     },
     onFechaCambiada() {
       this.obtenerVehiculos();
-    },
-    async eliminarVehiculo(id) {
-      console.log("Eliminado el vehículo con id %d", id);
     },
     async marcarSalida(vehiculo) {
       this.vehiculoParaCobrar = vehiculo;

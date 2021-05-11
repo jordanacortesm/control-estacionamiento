@@ -35,6 +35,7 @@
             </b-datepicker>
           </b-field>
         </b-field>
+        <h3 class="is-size-3">Total: {{ total() | dinero }}</h3>
         <b-table
           :data="vehiculos"
           :loading="cargando"
@@ -83,7 +84,12 @@
           >
             {{ props.row.pagoDeVehiculo.minutos | minutosAHorasYMinutos }}
           </b-table-column>
-          <b-table-column field="pagoDeVehiculo.pago" label="Pago" v-slot="props" sortable>
+          <b-table-column
+            field="pagoDeVehiculo.pago"
+            label="Pago"
+            v-slot="props"
+            sortable
+          >
             {{ props.row.pagoDeVehiculo.pago | dinero }}
           </b-table-column>
           <template #empty>
@@ -105,11 +111,17 @@ export default {
     vehiculos: [],
     cargando: false,
   }),
-
   async mounted() {
     await this.obtenerReporteConFechasSeleccionadas();
   },
   methods: {
+    total() {
+      let total = 0;
+      for (const vehiculo of this.vehiculos) {
+        total += vehiculo.pagoDeVehiculo.pago;
+      }
+      return total;
+    },
     onFechaFinCambiada() {
       this.$refs.seleccionadorFechaFin.toggle();
       this.onFechasCambiadas();
