@@ -31,7 +31,7 @@
       <template #end>
         <b-navbar-item tag="div">
           <div class="buttons">
-            <a class="button is-danger">
+            <a href="https://parzibyte.me/#contacto" class="button is-danger">
               <b-icon icon="help"></b-icon>
               <strong>Ayuda y soporte</strong>
             </a>

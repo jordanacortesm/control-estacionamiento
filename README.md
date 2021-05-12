@@ -1,5 +1,10 @@
 # control-estacionamiento
- Software open source y gratuito para control de parqueadero yestacionamiento
+ Software open source y gratuito para control de parqueadero y estacionamiento
+
+![Control de parqueadero gratuito](https://parzibyte.me/blog/wp-content/uploads/2021/05/Dashboard-de-sistema-para-estacionamientos-Mostrar-graficas-y-total-de-pagos.png)
+
+# Tutorial, presentación y descargas
+En mi blog: https://parzibyte.me/blog/2021/05/11/sistema-estacionamientos-gratuito-open-source/
 
 # Documentación
 Las tablas o mejor dicho el esquema de la base de datos se encuentra en **bd.go** dentro de la función
